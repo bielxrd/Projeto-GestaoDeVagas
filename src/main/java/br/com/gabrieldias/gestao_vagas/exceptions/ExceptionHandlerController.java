@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.util.ArrayList;
 import java.util.List;
 
-@ControllerAdvice
+@ControllerAdvice // Serve para dizer ao Spring que sera executada antes da requisicao cair na controller e fazer o tratamento de excecoes
 public class ExceptionHandlerController {
 
     @Autowired
     private MessageSource messageSource;
 
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler(MethodArgumentNotValidException.class) // Serve para dizer ao Spring que este metodo sera executado quando ocorrer uma excecao do tipo MethodArgumentNotValidException, e se acontecer, ele ira entrar no metodo e fazer o tratamento
     public ResponseEntity<List<ErrorMessageDTO>> handleMehodArgumentNotValidException(MethodArgumentNotValidException e) {
         List<ErrorMessageDTO> dto = new ArrayList<>();
         e.getBindingResult().getFieldErrors().forEach(err -> {
