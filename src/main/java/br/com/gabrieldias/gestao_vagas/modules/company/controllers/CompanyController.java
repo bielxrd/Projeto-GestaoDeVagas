@@ -3,6 +3,7 @@ package br.com.gabrieldias.gestao_vagas.modules.company.controllers;
 import br.com.gabrieldias.gestao_vagas.exceptions.UserFoundException;
 import br.com.gabrieldias.gestao_vagas.modules.company.entities.CompanyEntity;
 import br.com.gabrieldias.gestao_vagas.modules.company.useCases.CreateCompanyUseCase;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,7 @@ public class CompanyController {
     CreateCompanyUseCase createCompanyUseCase;
 
     @PostMapping("/")
-    public ResponseEntity<Object> create(@RequestBody CompanyEntity companyEntity) {
+    public ResponseEntity<Object> create(@Valid @RequestBody CompanyEntity companyEntity) {
         try {
             CompanyEntity company = createCompanyUseCase.execute(companyEntity);
             return ResponseEntity.ok().body(company);
