@@ -28,7 +28,7 @@ public class JobEntity {
     @JoinColumn(name = "id_company", insertable = false, updatable = false)
     private CompanyEntity companyEntity;
 
-    @Column(name = "id_company", nullable = false)
+    @Column(name = "id_company", insertable = true, updatable = true, nullable = false)
     private UUID companyId;
 
     @CreationTimestamp
