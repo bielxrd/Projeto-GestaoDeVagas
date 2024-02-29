@@ -6,6 +6,8 @@ import br.com.gabrieldias.gestao_vagas.modules.company.repositories.CompanyRepos
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class CreateCompanyUseCase {
 
@@ -14,11 +16,11 @@ public class CreateCompanyUseCase {
 
     public CompanyEntity execute(CompanyEntity companyEntity) {
 
-        this.companyRepository
-                .findByUsernameOrEmailOrName(companyEntity.getUsername(), companyEntity.getEmail(), companyEntity.getName())
-                .ifPresent((user) ->{
-                    throw new UserFoundException();
-                });
+        Optional<CompanyEntity> company = this.companyRepository.findByUsernameOrEmailOrName(companyEntity.getUsername(), companyEntity.getEmail(), companyEntity.getName());
+
+        if (company.isPresent()) {
+            throw new UserFoundException();
+        }
 
         return this.companyRepository.save(companyEntity);
     }

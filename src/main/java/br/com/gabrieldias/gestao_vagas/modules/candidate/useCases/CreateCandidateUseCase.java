@@ -6,6 +6,8 @@ import br.com.gabrieldias.gestao_vagas.modules.candidate.repositories.CandidateR
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class CreateCandidateUseCase {
 
@@ -13,11 +15,11 @@ public class CreateCandidateUseCase {
     private CandidateRepository candidateRepository;
 
     public CandidateEntity execute(CandidateEntity candidateEntity) {
-        this.candidateRepository
-                .findByUsernameOrEmail(candidateEntity.getUsername(), candidateEntity.getEmail())
-                .ifPresent((user) -> {
-                    throw new UserFoundException();
-                });
+        Optional<CandidateEntity> candidate = this.candidateRepository.findByUsernameOrEmail(candidateEntity.getUsername(), candidateEntity.getEmail());
+
+        if (candidate.isPresent()) {
+            throw new UserFoundException();
+        }
 
         return this.candidateRepository.save(candidateEntity);
     }
