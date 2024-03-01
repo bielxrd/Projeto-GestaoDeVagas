@@ -22,7 +22,7 @@ public class CreateCandidateUseCase {
         Optional<CandidateEntity> candidate = this.candidateRepository.findByUsernameOrEmail(candidateEntity.getUsername(), candidateEntity.getEmail());
 
         if (candidate.isPresent()) {
-            throw new UserFoundException();
+            throw new UserFoundException("Candidato ja cadastrado.");
         }
 
         String passwordEncoded = passwordEncoder.encode(candidateEntity.getPassword());
