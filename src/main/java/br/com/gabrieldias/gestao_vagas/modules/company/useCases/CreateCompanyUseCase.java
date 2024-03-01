@@ -23,7 +23,7 @@ public class CreateCompanyUseCase {
         Optional<CompanyEntity> company = this.companyRepository.findByUsernameOrEmailOrName(companyEntity.getUsername(), companyEntity.getEmail(), companyEntity.getName());
 
         if (company.isPresent()) {
-            throw new UserFoundException();
+            throw new UserFoundException("Empresa já cadastrada.");
         }
 
         String companyEncoded = passwordEncoder.encode(companyEntity.getPassword());
