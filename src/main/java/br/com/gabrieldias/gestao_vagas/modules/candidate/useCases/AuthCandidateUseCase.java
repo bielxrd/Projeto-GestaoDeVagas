@@ -12,6 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.naming.AuthenticationException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Optional;
 
 
@@ -39,7 +41,7 @@ public class AuthCandidateUseCase {
             }
 
             Algorithm algorithm = Algorithm.HMAC256(secretKey);
-            return JWT.create().withIssuer("LOGUSER").withSubject(candidateFound.get().getId().toString()).sign(algorithm);
+            return JWT.create().withIssuer("LOGUSER").withExpiresAt(Instant.now().plus(Duration.ofHours(2))).withSubject(candidateFound.get().getId().toString()).sign(algorithm);
         } else {
             throw new UsernameNotFoundException("Username/password incorrect.");
         }
