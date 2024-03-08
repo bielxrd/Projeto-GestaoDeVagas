@@ -1,6 +1,7 @@
 package br.com.gabrieldias.gestao_vagas.modules.candidate.useCases;
 
 import br.com.gabrieldias.gestao_vagas.modules.candidate.dto.AuthCandidateDTO;
+import br.com.gabrieldias.gestao_vagas.modules.candidate.dto.AuthCandidateResponseDTO;
 import br.com.gabrieldias.gestao_vagas.modules.candidate.entities.CandidateEntity;
 import br.com.gabrieldias.gestao_vagas.modules.candidate.repositories.CandidateRepository;
 import com.auth0.jwt.JWT;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.naming.AuthenticationException;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Optional;
 
 
@@ -29,7 +31,7 @@ public class AuthCandidateUseCase {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public String authenticate(AuthCandidateDTO authCandidateDTO) throws AuthenticationException {
+    public AuthCandidateResponseDTO authenticate(AuthCandidateDTO authCandidateDTO) throws AuthenticationException {
 
         Optional<CandidateEntity> candidateFound = candidateRepository.findByUsername(authCandidateDTO.getUsername());
 
@@ -41,7 +43,13 @@ public class AuthCandidateUseCase {
             }
 
             Algorithm algorithm = Algorithm.HMAC256(secretKey);
-            return JWT.create().withIssuer("LOGUSER").withExpiresAt(Instant.now().plus(Duration.ofHours(2))).withSubject(candidateFound.get().getId().toString()).sign(algorithm);
+            String token = JWT.create().withIssuer("LOGUSER")
+                    .withExpiresAt(Instant.now().plus(Duration.ofHours(2)))
+                    .withClaim("roles", Arrays.asList("candidate"))
+                    .withSubject(candidateFound.get().getId().toString())
+                    .sign(algorithm);
+
+            return AuthCandidateResponseDTO.builder().acess_token(token).build();
         } else {
             throw new UsernameNotFoundException("Username/password incorrect.");
         }
