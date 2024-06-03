@@ -1,7 +1,9 @@
 package br.com.gabrieldias.gestao_vagas.modules.company.controllers;
 
 
+import br.com.gabrieldias.gestao_vagas.modules.candidate.dto.AuthCandidateResponseDTO;
 import br.com.gabrieldias.gestao_vagas.modules.company.dto.AuthCompanyDTO;
+import br.com.gabrieldias.gestao_vagas.modules.company.dto.AuthCompanyResponseDTO;
 import br.com.gabrieldias.gestao_vagas.modules.company.useCases.AuthCompanyUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +25,7 @@ public class AuthCompanyController {
     @PostMapping("/company")
     public ResponseEntity<Object> create(@RequestBody AuthCompanyDTO authCompanyDTO) {
         try {
-            String token = this.authCompanyUseCase.execute(authCompanyDTO);
+           AuthCompanyResponseDTO token = this.authCompanyUseCase.execute(authCompanyDTO);
             return ResponseEntity.ok().body(token);
 
         } catch (Exception e) {
