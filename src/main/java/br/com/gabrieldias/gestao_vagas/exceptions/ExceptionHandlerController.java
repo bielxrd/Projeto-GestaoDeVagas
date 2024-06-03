@@ -31,5 +31,10 @@ public class ExceptionHandlerController {
         return new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(CandidateNotFoundException.class)
+    public ResponseEntity handleCandidateNotFoundException(CandidateNotFoundException candidateNotFoundException) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(candidateNotFoundException.getMessage());
+    }
+
 
 }
