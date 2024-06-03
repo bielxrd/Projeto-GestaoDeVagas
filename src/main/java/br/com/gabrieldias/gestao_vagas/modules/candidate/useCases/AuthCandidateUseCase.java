@@ -46,7 +46,7 @@ public class AuthCandidateUseCase {
             Instant expiresIn = Instant.now().plus(Duration.ofHours(2));
             String token = JWT.create().withIssuer("LOGUSER")
                     .withExpiresAt(expiresIn)
-                    .withClaim("roles", Arrays.asList("candidate"))
+                    .withClaim("roles", Arrays.asList("CANDIDATE"))
                     .withSubject(candidateFound.get().getId().toString())
                     .sign(algorithm);
 
