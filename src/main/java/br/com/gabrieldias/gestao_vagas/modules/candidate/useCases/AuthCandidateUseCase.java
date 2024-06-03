@@ -43,13 +43,14 @@ public class AuthCandidateUseCase {
             }
 
             Algorithm algorithm = Algorithm.HMAC256(secretKey);
+            Instant expiresIn = Instant.now().plus(Duration.ofHours(2));
             String token = JWT.create().withIssuer("LOGUSER")
-                    .withExpiresAt(Instant.now().plus(Duration.ofHours(2)))
+                    .withExpiresAt(expiresIn)
                     .withClaim("roles", Arrays.asList("candidate"))
                     .withSubject(candidateFound.get().getId().toString())
                     .sign(algorithm);
 
-            return AuthCandidateResponseDTO.builder().acess_token(token).build();
+            return AuthCandidateResponseDTO.builder().acess_token(token).expiresIn(expiresIn.toEpochMilli()).build();
         } else {
             throw new UsernameNotFoundException("Username/password incorrect.");
         }
