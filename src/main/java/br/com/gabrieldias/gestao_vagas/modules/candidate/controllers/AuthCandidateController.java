@@ -9,14 +9,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/candidate")
 public class AuthCandidateController {
 
     @Autowired
     private AuthCandidateUseCase authCandidateUseCase;
 
 
-    @PostMapping("/candidate")
+    @PostMapping("/auth")
     public ResponseEntity login(@RequestBody AuthCandidateDTO authCandidateDTO) {
         try {
             AuthCandidateResponseDTO token = authCandidateUseCase.authenticate(authCandidateDTO);
