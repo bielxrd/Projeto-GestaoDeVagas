@@ -1,6 +1,8 @@
 package br.com.gabrieldias.gestao_vagas.modules.company.useCases;
 
+import br.com.gabrieldias.gestao_vagas.modules.candidate.dto.AuthCandidateResponseDTO;
 import br.com.gabrieldias.gestao_vagas.modules.company.dto.AuthCompanyDTO;
+import br.com.gabrieldias.gestao_vagas.modules.company.dto.AuthCompanyResponseDTO;
 import br.com.gabrieldias.gestao_vagas.modules.company.entities.CompanyEntity;
 import br.com.gabrieldias.gestao_vagas.modules.company.repositories.CompanyRepository;
 import com.auth0.jwt.JWT;
@@ -28,7 +30,7 @@ public class AuthCompanyUseCase {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public String execute(AuthCompanyDTO authCompanyDTO) throws AuthenticationException {
+    public AuthCompanyResponseDTO execute(AuthCompanyDTO authCompanyDTO) throws AuthenticationException {
         Optional<CompanyEntity> company = this.companyRepository.findByUsername(authCompanyDTO.getUsername());
 
         if (company.isPresent()) {
@@ -39,11 +41,12 @@ public class AuthCompanyUseCase {
             }
 
             Algorithm algorithm = Algorithm.HMAC256(secretKey);
-            String token = JWT.create().withIssuer("Javagas").withExpiresAt(Instant.now().plus(Duration.ofHours(2)))
+            Instant expiresIn = Instant.now().plus(Duration.ofHours(2));
+            String token = JWT.create().withIssuer("Javagas").withExpiresAt(expiresIn)
                     .withSubject(company.get().getId().toString())
                     .sign(algorithm); // Necessario passar para String o Subject do JWT.
-            return token;
 
+            return AuthCompanyResponseDTO.builder().acess_token(token).expiresIn(expiresIn.toEpochMilli()).build();
         } else {
             throw new UsernameNotFoundException("Username/password incorrect.");
         }
