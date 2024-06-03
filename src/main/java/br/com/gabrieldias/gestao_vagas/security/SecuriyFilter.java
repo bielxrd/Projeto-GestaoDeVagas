@@ -22,21 +22,23 @@ public class SecuriyFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        SecurityContextHolder.getContext().setAuthentication(null);
+//      SecurityContextHolder.getContext().setAuthentication(null);
         String authorization = request.getHeader("Authorization");
 
-        if (authorization != null) {
-            String subjectToken = jwtProvider.validateToken(authorization);
+        if(request.getRequestURI().startsWith("/company")) {
+            if (authorization != null) {
+                String subjectToken = jwtProvider.validateToken(authorization);
 
-            if (subjectToken.isEmpty()) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                return;
+                if (subjectToken.isEmpty()) {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    return;
+                }
+
+                request.setAttribute("company_id", subjectToken);
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(subjectToken, null, Collections.emptyList());
+                SecurityContextHolder.getContext().setAuthentication(auth);
+                System.out.println(subjectToken);
             }
-
-            request.setAttribute("company_id", subjectToken);
-            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(subjectToken, null, Collections.emptyList());
-            SecurityContextHolder.getContext().setAuthentication(auth);
-
         }
 
         filterChain.doFilter(request, response);
