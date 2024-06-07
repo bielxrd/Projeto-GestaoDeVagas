@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.naming.AuthenticationException;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Optional;
 
 @Service
@@ -44,6 +45,7 @@ public class AuthCompanyUseCase {
             Instant expiresIn = Instant.now().plus(Duration.ofHours(2));
             String token = JWT.create().withIssuer("Javagas").withExpiresAt(expiresIn)
                     .withSubject(company.get().getId().toString())
+                    .withClaim("roles", Arrays.asList("COMPANY"))
                     .sign(algorithm); // Necessario passar para String o Subject do JWT.
 
             return AuthCompanyResponseDTO.builder().acess_token(token).expiresIn(expiresIn.toEpochMilli()).build();
