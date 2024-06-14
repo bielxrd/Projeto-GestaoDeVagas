@@ -38,7 +38,7 @@ public class CandidateEntity {
     private String email;
 
     @Length(min = 10, max = 100, message = "O campo [password] deve conter entre 10 e 100 caracteres.")
-    @Schema(example = "Gabriel@123", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(example = "Gabriel@123", requiredMode = Schema.RequiredMode.REQUIRED, minLength = 10, maxLength = 100)
     private String password;
     @Schema(example = "Pessoa desenvolvedora Java SENIOR", requiredMode = Schema.RequiredMode.REQUIRED)
     private String description;
