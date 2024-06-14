@@ -3,6 +3,8 @@ package br.com.gabrieldias.gestao_vagas.modules.company.controllers;
 import br.com.gabrieldias.gestao_vagas.modules.company.dto.CreateJobDTO;
 import br.com.gabrieldias.gestao_vagas.modules.company.entities.JobEntity;
 import br.com.gabrieldias.gestao_vagas.modules.company.useCases.CreateJobUseCase;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/company/job")
+@Tag(name = "Vagas", description = "Rotas para cadastro de vagas")
 public class JobController {
 
     @Autowired
@@ -24,6 +27,7 @@ public class JobController {
 
     @PostMapping("/")
     @PreAuthorize("hasRole('COMPANY')")
+    @Operation(summary = "Responsável por realizar um cadastro de uma vaga, necessário estar autenticado.")
     public ResponseEntity<Object> create(@Valid @RequestBody CreateJobDTO createJobDTO, HttpServletRequest httpServletRequest) {
 
         Object companyId = httpServletRequest.getAttribute("company_id");
