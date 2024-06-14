@@ -4,6 +4,10 @@ import br.com.gabrieldias.gestao_vagas.modules.candidate.dto.AuthCandidateDTO;
 import br.com.gabrieldias.gestao_vagas.modules.candidate.dto.AuthCandidateResponseDTO;
 import br.com.gabrieldias.gestao_vagas.modules.candidate.useCases.AuthCandidateUseCase;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.Table;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +26,11 @@ public class AuthCandidateController {
 
     @PostMapping("/auth")
     @Operation(summary = "Responsável por efetuar o login do candidato e retornar um JWT Token.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {
+                    @Content(schema = @Schema(implementation = AuthCandidateResponseDTO.class))
+            })
+    })
     public ResponseEntity login(@RequestBody AuthCandidateDTO authCandidateDTO) {
         try {
             AuthCandidateResponseDTO token = authCandidateUseCase.authenticate(authCandidateDTO);
