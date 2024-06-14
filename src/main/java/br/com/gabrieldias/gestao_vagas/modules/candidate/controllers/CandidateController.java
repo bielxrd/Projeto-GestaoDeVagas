@@ -63,7 +63,8 @@ public class CandidateController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {
                     @Content(schema = @Schema(implementation = ProfileCandidateResponseDTO.class))
-            })
+            }),
+            @ApiResponse(responseCode = "400", description = "User not found")
     })
     @SecurityRequirement(name = "jwt_auth")
     public ResponseEntity<ProfileCandidateResponseDTO> getCandidateProfile(HttpServletRequest request) {
