@@ -10,6 +10,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import java.util.List;
+
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
@@ -20,6 +22,12 @@ public class SecurityConfig {
     @Autowired
     private SecurityCandidateFilter securityCandidateFilter;
 
+    private static final String[] SWAGGER_LIST = {
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/swagger-resources/**"
+
+    };
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -29,6 +37,7 @@ public class SecurityConfig {
                     auth.requestMatchers("/company/").permitAll();
                     auth.requestMatchers("/company/auth").permitAll();
                     auth.requestMatchers("/candidate/auth").permitAll();
+                    auth.requestMatchers(SWAGGER_LIST).permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .addFilterBefore(securityCandidateFilter, BasicAuthenticationFilter.class)
