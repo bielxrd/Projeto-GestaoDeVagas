@@ -17,5 +17,5 @@ public interface JobRepository extends JpaRepository<JobEntity, UUID> {
 //            "WHERE j.description LIKE CONCAT('%', :filter, '%')")
 //    List<JobDTO> findByDescriptionContaining(@Param("filter") String filter);
 
-    List<JobEntity> findByDescriptionContaining(String filter);
+    List<JobEntity> findByDescriptionContainingIgnoreCase(String filter);
 }
