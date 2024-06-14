@@ -1,12 +1,12 @@
 package br.com.gabrieldias.gestao_vagas.modules.candidate.controllers;
 
 
-import br.com.gabrieldias.gestao_vagas.exceptions.UserFoundException;
 import br.com.gabrieldias.gestao_vagas.modules.candidate.dto.ProfileCandidateResponseDTO;
 import br.com.gabrieldias.gestao_vagas.modules.candidate.entities.CandidateEntity;
-import br.com.gabrieldias.gestao_vagas.modules.candidate.repositories.CandidateRepository;
 import br.com.gabrieldias.gestao_vagas.modules.candidate.useCases.CreateCandidateUseCase;
 import br.com.gabrieldias.gestao_vagas.modules.candidate.useCases.ProfileCandidateUseCase;
+import br.com.gabrieldias.gestao_vagas.modules.company.dto.ListAllJobsDTO;
+import br.com.gabrieldias.gestao_vagas.modules.candidate.useCases.ListAllJobsUseCase;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +26,9 @@ public class CandidateController {
 
     @Autowired
     private ProfileCandidateUseCase profileCandidateUseCase;
+
+    @Autowired
+    private ListAllJobsUseCase listAllJobsUseCase;
 
     @PostMapping("/")
     public ResponseEntity<Object> create(@Valid @RequestBody CandidateEntity candidateEntity) {
@@ -48,6 +51,15 @@ public class CandidateController {
 
         return ResponseEntity.status(HttpStatus.OK).body(candidateProfile);
 
+    }
+
+    @GetMapping("/jobs/")
+    @PreAuthorize("hasRole('CANDIDATE')")
+    public ResponseEntity<ListAllJobsDTO> getAllJobs() {
+
+        ListAllJobsDTO jobs = this.listAllJobsUseCase.listAllJobs();
+
+        return ResponseEntity.ok().body(jobs);
     }
 
 
