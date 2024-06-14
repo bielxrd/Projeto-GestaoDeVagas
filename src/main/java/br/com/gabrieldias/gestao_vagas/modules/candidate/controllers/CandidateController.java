@@ -60,6 +60,11 @@ public class CandidateController {
     @GetMapping("/profile/")
     @PreAuthorize("hasRole('CANDIDATE')")
     @Operation(summary = "Rota para obter perfil do candidato logado")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {
+                    @Content(schema = @Schema(implementation = ProfileCandidateResponseDTO.class))
+            })
+    })
     @SecurityRequirement(name = "jwt_auth")
     public ResponseEntity<ProfileCandidateResponseDTO> getCandidateProfile(HttpServletRequest request) {
 
