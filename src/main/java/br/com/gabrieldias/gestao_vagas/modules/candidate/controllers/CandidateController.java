@@ -9,6 +9,8 @@ import br.com.gabrieldias.gestao_vagas.modules.candidate.useCases.ProfileCandida
 import br.com.gabrieldias.gestao_vagas.modules.company.dto.ListAllJobsDTO;
 import br.com.gabrieldias.gestao_vagas.modules.candidate.useCases.ListAllJobsUseCase;
 import br.com.gabrieldias.gestao_vagas.modules.company.entities.JobEntity;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/candidate")
+@Tag(name = "Candidato", description = "Rotas do Candidato")
 public class CandidateController {
 
     @Autowired
@@ -37,6 +40,7 @@ public class CandidateController {
     private ListAllJobsByFilterUseCase listAllJobsByFilterUseCase;
 
     @PostMapping("/")
+    @Operation(summary = "Rota para cadastrar candidato.")
     public ResponseEntity<Object> create(@Valid @RequestBody CandidateEntity candidateEntity) {
         try {
             CandidateEntity candidate = createCandidateUseCase.execute(candidateEntity);
@@ -49,6 +53,7 @@ public class CandidateController {
 
     @GetMapping("/profile/")
     @PreAuthorize("hasRole('CANDIDATE')")
+    @Operation(summary = "Rota para obter perfil do candidato logado")
     public ResponseEntity<ProfileCandidateResponseDTO> getCandidateProfile(HttpServletRequest request) {
 
         Object idCandidate = request.getAttribute("candidate_id");
@@ -61,6 +66,7 @@ public class CandidateController {
 
     @GetMapping("/jobs/")
     @PreAuthorize("hasRole('CANDIDATE')")
+    @Operation(summary = "Rota para listar todas as vagas")
     public ResponseEntity<ListAllJobsDTO> getAllJobs() {
 
         ListAllJobsDTO jobs = this.listAllJobsUseCase.listAllJobs();
@@ -70,6 +76,7 @@ public class CandidateController {
 
     @GetMapping("/job")
     @PreAuthorize("hasRole('CANDIDATE')")
+    @Operation(summary = "Rota para listar todas as vagas com base em um filtro (description da vaga).")
     public List<JobEntity> findJobByFilter(@RequestParam String filter) {
         return this.listAllJobsByFilterUseCase.execute(filter);
     }
