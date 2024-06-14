@@ -47,6 +47,11 @@ public class CandidateController {
 
     @PostMapping("/")
     @Operation(summary = "Rota para cadastrar candidato.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {
+                    @Content(schema = @Schema(implementation = CandidateEntity.class))
+            })
+    })
     public ResponseEntity<Object> create(@Valid @RequestBody CandidateEntity candidateEntity) {
         try {
             CandidateEntity candidate = createCandidateUseCase.execute(candidateEntity);
