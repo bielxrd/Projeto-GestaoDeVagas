@@ -34,7 +34,7 @@ public class ApplyJobCandidateUseCaseTest {
 
     @Test
     @DisplayName("Should not be able to apply job with candidate not found.")
-    public void shouldNotBeAbleToCreateToApplyJobWithCandidateNotFound() {
+    public void shouldNotBeAbleToApplyJobWithCandidateNotFound() {
         try {
             applyJobCandidateUseCase.applyJob(null, null);
         } catch (Exception e) {
