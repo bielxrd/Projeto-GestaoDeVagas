@@ -2,12 +2,10 @@ package br.com.gabrieldias.gestao_vagas.modules.candidate.controllers;
 
 
 import br.com.gabrieldias.gestao_vagas.modules.candidate.dto.ProfileCandidateResponseDTO;
+import br.com.gabrieldias.gestao_vagas.modules.candidate.entities.ApplyJobEntity;
 import br.com.gabrieldias.gestao_vagas.modules.candidate.entities.CandidateEntity;
-import br.com.gabrieldias.gestao_vagas.modules.candidate.useCases.CreateCandidateUseCase;
-import br.com.gabrieldias.gestao_vagas.modules.candidate.useCases.ListAllJobsByFilterUseCase;
-import br.com.gabrieldias.gestao_vagas.modules.candidate.useCases.ProfileCandidateUseCase;
+import br.com.gabrieldias.gestao_vagas.modules.candidate.useCases.*;
 import br.com.gabrieldias.gestao_vagas.modules.company.dto.ListAllJobsDTO;
-import br.com.gabrieldias.gestao_vagas.modules.candidate.useCases.ListAllJobsUseCase;
 import br.com.gabrieldias.gestao_vagas.modules.company.entities.JobEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -44,6 +42,9 @@ public class CandidateController {
 
     @Autowired
     private ListAllJobsByFilterUseCase listAllJobsByFilterUseCase;
+
+    @Autowired
+    private ApplyJobCandidateUseCase applyJobCandidateUseCase;
 
     @PostMapping("/")
     @Operation(summary = "Rota para cadastrar candidato.")
@@ -110,4 +111,17 @@ public class CandidateController {
     public List<JobEntity> findJobByFilter(@RequestParam String filter) {
         return this.listAllJobsByFilterUseCase.execute(filter);
     }
+
+    @PostMapping("/apply/{idJob}")
+    @PreAuthorize("hasRole('CANDIDATE')")
+    public ResponseEntity<Object> applyJob(HttpServletRequest request, @PathVariable("idJob") UUID idJob) {
+
+        Object candidateId = request.getAttribute("candidate_id");
+
+        ApplyJobEntity applyJob = applyJobCandidateUseCase.applyJob(UUID.fromString(candidateId.toString()), idJob);
+
+        return ResponseEntity.ok().body(applyJob);
+
+    }
+
 }
