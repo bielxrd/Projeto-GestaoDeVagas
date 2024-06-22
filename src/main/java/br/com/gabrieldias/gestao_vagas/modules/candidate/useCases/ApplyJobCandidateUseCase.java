@@ -6,6 +6,7 @@ import br.com.gabrieldias.gestao_vagas.modules.candidate.entities.ApplyJobEntity
 import br.com.gabrieldias.gestao_vagas.modules.candidate.repositories.ApplyJobRepostory;
 import br.com.gabrieldias.gestao_vagas.modules.candidate.repositories.CandidateRepository;
 import br.com.gabrieldias.gestao_vagas.modules.company.repositories.JobRepository;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ public class ApplyJobCandidateUseCase {
     @Autowired
     private ApplyJobRepostory applyJobRepostory;
 
+    @SneakyThrows
     public ApplyJobEntity applyJob(UUID idCandidate, UUID idJob) { // Necessita do ID da vaga e do CANDIDATO
         // Validar se o candidato existe.
         this.candidateRepository.findById(idCandidate).orElseThrow(() -> new UserNotFoundException("User Not Found"));
