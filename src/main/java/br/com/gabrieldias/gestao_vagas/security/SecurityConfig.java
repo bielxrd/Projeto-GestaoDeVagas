@@ -10,14 +10,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-import java.util.List;
-
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
 
     @Autowired
-    private SecuriyFilter securiyFilter;
+    private SecurityCompanyFilter securityCompanyFilter;
 
     @Autowired
     private SecurityCandidateFilter securityCandidateFilter;
@@ -41,7 +39,7 @@ public class SecurityConfig {
                     auth.anyRequest().authenticated();
                 })
                 .addFilterBefore(securityCandidateFilter, BasicAuthenticationFilter.class)
-                .addFilterBefore(securiyFilter, BasicAuthenticationFilter.class);
+                .addFilterBefore(securityCompanyFilter, BasicAuthenticationFilter.class);
 
         return httpSecurity.build();
     }

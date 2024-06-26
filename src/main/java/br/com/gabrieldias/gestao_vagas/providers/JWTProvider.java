@@ -20,7 +20,6 @@ public class JWTProvider {
             DecodedJWT subject = JWT.require(algorithm).build().verify(token);
             return subject;
         } catch (JWTVerificationException e) {
-            e.printStackTrace();
             return null;
         }
     }
