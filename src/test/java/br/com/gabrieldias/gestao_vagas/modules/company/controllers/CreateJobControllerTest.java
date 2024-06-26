@@ -2,6 +2,7 @@ package br.com.gabrieldias.gestao_vagas.modules.company.controllers;
 
 import java.util.UUID;
 
+import br.com.gabrieldias.gestao_vagas.exceptions.CompanyNotFoundException;
 import br.com.gabrieldias.gestao_vagas.modules.company.dto.CreateJobDTO;
 import br.com.gabrieldias.gestao_vagas.modules.company.entities.CompanyEntity;
 import br.com.gabrieldias.gestao_vagas.modules.company.repositories.CompanyRepository;
@@ -21,6 +22,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -73,6 +76,28 @@ public class CreateJobControllerTest {
                         .header("Authorization",
                                 TestUtils.generateTokenTest(company.getId())))
                 .andExpect(status().isOk());
+
+    }
+
+    @Test
+    @SneakyThrows
+    public void should_not_be_able_to_create_a_new_job_if_company_not_found() {
+
+        CreateJobDTO createJob = CreateJobDTO.builder()
+                .benefits("BENEFIST_TEST")
+                .description("DESCRIPTION_TEST")
+                .level("LEVEL_TEST")
+                .build();
+
+        ResultActions resultActions = mockMvc.perform(post("/company/job/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(TestUtils.objectToJson(createJob))
+                        .header("Authorization",
+                                TestUtils.generateTokenTest(UUID.randomUUID())))
+                .andExpect(result -> {
+                    assertInstanceOf(CompanyNotFoundException.class, result.getResolvedException());
+                })
+                .andExpect(status().is(404));
 
     }
 
