@@ -1,5 +1,6 @@
 package br.com.gabrieldias.gestao_vagas.modules.candidate.useCases;
 
+import br.com.gabrieldias.gestao_vagas.exceptions.AuthenticationExceptionImpl;
 import br.com.gabrieldias.gestao_vagas.modules.candidate.dto.AuthCandidateDTO;
 import br.com.gabrieldias.gestao_vagas.modules.candidate.dto.AuthCandidateResponseDTO;
 import br.com.gabrieldias.gestao_vagas.modules.candidate.entities.CandidateEntity;
@@ -39,7 +40,7 @@ public class AuthCandidateUseCase {
             boolean matches = passwordEncoder.matches(authCandidateDTO.getPassword(), candidateFound.get().getPassword());
 
             if (!matches) {
-                throw new AuthenticationException("Username/password incorrect.");
+                throw new AuthenticationExceptionImpl("Username/password incorrect.");
             }
 
             Algorithm algorithm = Algorithm.HMAC256(secretKey);
