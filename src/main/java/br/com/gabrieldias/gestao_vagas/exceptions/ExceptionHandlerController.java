@@ -36,7 +36,7 @@ public class ExceptionHandlerController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(candidateNotFoundException.getMessage());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(CompanyNotFoundException.class)
     public ResponseEntity<Object> handleCompanyNotFoundException(CompanyNotFoundException companyNotFoundException) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(companyNotFoundException.getMessage());
     }
