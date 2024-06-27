@@ -74,7 +74,7 @@ public class CreateJobControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(TestUtils.objectToJson(createJob))
                         .header("Authorization",
-                                TestUtils.generateTokenTest(company.getId())))
+                                TestUtils.generateTokenTest(company.getId(), "JAVAGAS_@123#")))
                 .andExpect(status().isOk());
 
     }
@@ -93,7 +93,7 @@ public class CreateJobControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(TestUtils.objectToJson(createJob))
                         .header("Authorization",
-                                TestUtils.generateTokenTest(UUID.randomUUID())))
+                                TestUtils.generateTokenTest(UUID.randomUUID(), "JAVAGAS_@123#")))
                 .andExpect(result -> {
                     assertInstanceOf(CompanyNotFoundException.class, result.getResolvedException());
                 })
