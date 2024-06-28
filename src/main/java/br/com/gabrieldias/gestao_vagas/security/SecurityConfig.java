@@ -24,8 +24,9 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/swagger-resources/**"
-
     };
+
+    private static final String ACTUATOR = "/actuator/**";
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -36,6 +37,7 @@ public class SecurityConfig {
                     auth.requestMatchers("/company/auth").permitAll();
                     auth.requestMatchers("/candidate/auth").permitAll();
                     auth.requestMatchers(SWAGGER_LIST).permitAll();
+                    auth.requestMatchers(ACTUATOR).permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .addFilterBefore(securityCandidateFilter, BasicAuthenticationFilter.class)
