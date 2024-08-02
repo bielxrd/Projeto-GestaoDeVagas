@@ -23,3 +23,14 @@ jobs:
         run: docker build -t bielxrd/gestao_vagas .
       - name: Publish image
         run: docker push bielxrd/gestao_vagas
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Pull image docker hub
+        run: docker pull bielxrd/gestao_vagas:latest
+      - name: Remove container
+        run: docker rm -f gestao-vagas
+      - name: Run docker container
+        run: docker run -d -p 8080:8080 -e DATABASE_URL=${{secrets.DATABASE_URL}} -e DATABASE_USER=${{secrets.DATABASE_USER}} -e DATABASE_PASSWORD=${{secrets.DATABASE_PASSWORD}} --name gestao-vagas bielxrd/gestao_vagas
